@@ -7,6 +7,7 @@ public class ARCoreButtons : MonoBehaviour {
 	public LightningArtist lightningArtist;
 	public ShowHideGeneric showHideGeneric;
 	public BrushInputARCore brushInputTango;
+    public SpeechTrigger speechTrigger;
 
 	float LABEL_START_X = 15.0f;
 	float LABEL_START_Y = 15.0f;
@@ -38,10 +39,10 @@ public class ARCoreButtons : MonoBehaviour {
 
 		if (menuCounter == 1) {
 			// 1-1.
-			Rect writeButton = new Rect(BUTTON_GAP_X, Screen.height - (1 * (BUTTON_SIZE_Y - BUTTON_GAP_X)), BUTTON_SIZE_X, BUTTON_SIZE_Y);
+			Rect speakButton = new Rect(BUTTON_GAP_X, Screen.height - (1 * (BUTTON_SIZE_Y - BUTTON_GAP_X)), BUTTON_SIZE_X, BUTTON_SIZE_Y);
 			//isOn = lightningArtist.showOnionSkin ? "Off" : "On";
-			if (GUI.Button(writeButton, FONT_SIZE + "Write" + "</size>")) {
-				lightningArtist.armWriteFile = true;
+			if (GUI.Button(speakButton, FONT_SIZE + "Speak" + "</size>")) {
+                speechTrigger.listen();
 			}
 
             // 1-2.
@@ -129,6 +130,13 @@ public class ARCoreButtons : MonoBehaviour {
             //isOn = lightningArtist.showOnionSkin ? "Off" : "On";
             if (GUI.Button(newLayerButton, FONT_SIZE + "New Layer" + "</size>")) {
                 lightningArtist.inputNewLayer();
+            }
+
+            // 2-8.
+            Rect writeButton = new Rect(BUTTON_GAP_X, Screen.height - (8 * (BUTTON_SIZE_Y - BUTTON_GAP_X)), BUTTON_SIZE_X, BUTTON_SIZE_Y);
+            //isOn = lightningArtist.showOnionSkin ? "Off" : "On";
+            if (GUI.Button(writeButton, FONT_SIZE + "Write" + "</size>")) {
+                lightningArtist.armWriteFile = true;
             }
 
             // 2-1.

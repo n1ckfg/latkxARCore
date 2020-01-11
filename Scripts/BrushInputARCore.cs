@@ -5,6 +5,7 @@ public class BrushInputARCore : MonoBehaviour {
 
 	public LightningArtist lightningArtist;
 	public ARCoreButtons tangoButtons;
+    public ShowHideGeneric colorPalette;
 
 	public enum DrawMode { FREE, FIXED, ALL_ROTO }
 	public DrawMode drawMode = DrawMode.FREE;
@@ -35,40 +36,42 @@ public class BrushInputARCore : MonoBehaviour {
 		origTargetPos = lightningArtist.target.transform.position;
 	}
 
-	void Update() {
-		touchDown = false;
-		touchUp = false;
+    void Update() {
+        touchDown = false;
+        touchUp = false;
 
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && GUIUtility.hotControl == 0) { 
-			touchActive = true;
-			touchDown = true;
-		} else if (Input.touchCount < 1 || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) {
-			touchActive = false;
-			touchUp = true;
-		}
+        if (!colorPalette.isTracking) {
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && GUIUtility.hotControl == 0) {
+                touchActive = true;
+                touchDown = true;
+            } else if (Input.touchCount < 1 || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)) {
+                touchActive = false;
+                touchUp = true;
+            }
 
-		if (touchActive && drawEnabled) {
-			Vector3 p = lightningArtist.target.transform.position;
+            if (touchActive && drawEnabled) {
+                Vector3 p = lightningArtist.target.transform.position;
 
-			if (drawMode == DrawMode.FREE) {
-                // snap z to camera viewpoint, not real depth
-                if (rotoEnabled) {
+                if (drawMode == DrawMode.FREE) {
+                    // snap z to camera viewpoint, not real depth
+                    if (rotoEnabled) {
+                        p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, depthTarget.transform.position.z));
+                    } else {
+                        p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, origTargetPos.z));
+                    }
+                } else if (drawMode == DrawMode.FIXED) {
+                    // z isn't changed
+                    //p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, p.z));
+                } else if (drawMode == DrawMode.ALL_ROTO) {
+                    // xyz snapped
                     p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, depthTarget.transform.position.z));
-                } else {
-                    p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, origTargetPos.z));
+                    p.z = depthTarget.transform.position.z;
                 }
-            } else if (drawMode == DrawMode.FIXED) {
-				// z isn't changed
-				//p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, p.z));
-			} else if (drawMode == DrawMode.ALL_ROTO) {
-				// xyz snapped
-				p = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, depthTarget.transform.position.z));
-				p.z = depthTarget.transform.position.z;
-			}
-			lightningArtist.target.transform.position = p;
-		}
+                lightningArtist.target.transform.position = p;
+            }
 
-		lightningArtist.clicked = touchActive;
+            lightningArtist.clicked = touchActive;
+        }
 
 		// ~ ~ ~ ~ ~ gamepad ~ ~ ~ ~ ~ ~
 		/*

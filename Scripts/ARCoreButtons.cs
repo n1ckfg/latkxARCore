@@ -54,7 +54,7 @@ public class ARCoreButtons : MonoBehaviour
 
             // 1-3.
             Rect colorButton = new Rect(BUTTON_GAP_X, Screen.height - (3 * (BUTTON_SIZE_Y - BUTTON_GAP_X)), BUTTON_SIZE_X, BUTTON_SIZE_Y);
-            isOn = showHideGeneric.target[0].activeSelf ? "Off" : "On";
+            isOn = showHideGeneric.target[0].activeSelf ? "ON" : "OFF";
             if (GUI.Button(colorButton, FONT_SIZE + "Palette " + isOn + "</size>")) {
                 if (showHideGeneric.target[0].activeSelf) {
                     showHideGeneric.hideColor();
@@ -65,7 +65,7 @@ public class ARCoreButtons : MonoBehaviour
 
             // 1-4.
             Rect onionButton = new Rect(BUTTON_GAP_X, Screen.height - (4 * (BUTTON_SIZE_Y - BUTTON_GAP_X)), BUTTON_SIZE_X, BUTTON_SIZE_Y);
-            isOn = lightningArtist.showOnionSkin ? "Off" : "On";
+            isOn = lightningArtist.showOnionSkin ? "ON" : "OFF";
             if (GUI.Button(onionButton, FONT_SIZE + "Onion Skin " + isOn + "</size>")) {
                 lightningArtist.inputOnionSkin();
             }

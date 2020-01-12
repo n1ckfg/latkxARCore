@@ -8,6 +8,7 @@ public class ARCoreButtons : MonoBehaviour
     public LightningArtist lightningArtist;
     public ShowHideGeneric showHideGeneric;
     public BrushInputARCore brushInputTango;
+    public int fontSize = 25;
 
     float LABEL_START_X = 15.0f;
     float LABEL_START_Y = 15.0f;
@@ -24,7 +25,9 @@ public class ARCoreButtons : MonoBehaviour
     //float POSE_LABEL_START_Y = EVENT_LABEL_START_Y + LABEL_OFFSET;
     //float DEPTH_LABLE_START_Y = POSE_LABEL_START_Y + LABEL_OFFSET;
     string FLOAT_FORMAT = "F3";
-    string FONT_SIZE = "<size=25>";
+    string FONT_SIZE;
+
+    private GUIStyle guiStyle;
 
     int menuCounter = 1;
     int menuCounterMax = 2;
@@ -32,6 +35,11 @@ public class ARCoreButtons : MonoBehaviour
     void Awake() {
         if (lightningArtist == null) lightningArtist = GetComponent<LightningArtist>();
         if (brushInputTango == null) brushInputTango = GetComponent<BrushInputARCore>();
+
+        FONT_SIZE = "<size=" + fontSize + ">";
+        guiStyle = new GUIStyle(); //create a new variable
+        guiStyle.fontSize = (int) (fontSize * 1.5f);
+        guiStyle.normal.textColor = Color.white;
     }
 
     void OnGUI() {
@@ -149,6 +157,8 @@ public class ARCoreButtons : MonoBehaviour
             menuCounter++;
             if (menuCounter > menuCounterMax) menuCounter = 1;
         }
+
+        GUI.Label(new Rect(BUTTON_GAP_X * 2f, Screen.height - (11 * (BUTTON_SIZE_Y - BUTTON_GAP_X)) + fontSize, BUTTON_SIZE_X*2, BUTTON_SIZE_Y), lightningArtist.statusText, guiStyle);
     }
 
 }
